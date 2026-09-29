@@ -1,0 +1,32 @@
+{
+  "name": "duan-xiaolong-portfolio",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node server/server.js",
+    "build": "vite build",
+    "build:public": "node scripts/build-public-site.mjs",
+    "deploy:github": "node scripts/deploy-github-pages.mjs",
+    "lint": "oxlint",
+    "test": "node --test",
+    "preview": "vite preview",
+    "start": "node server/server.js --production"
+  },
+  "dependencies": {
+    "express": "^5.2.1",
+    "lucide-react": "^1.48.0",
+    "multer": "^2.4.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "sharp": "^0.35.5"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.7",
+    "@vitejs/plugin-react": "^6.1.1",
+    "oxlint": "^1.81.0",
+    "playwright-core": "^1.63.0",
+    "vite": "^8.3.0"
+  }
+}
