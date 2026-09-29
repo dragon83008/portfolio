@@ -6,7 +6,7 @@ import sharp from 'sharp'
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const dataDir = process.env.PORTFOLIO_DATA_DIR ? resolve(process.env.PORTFOLIO_DATA_DIR) : join(root, 'data')
-const output = join(root, 'dist-public')
+const output = process.env.PORTFOLIO_PUBLIC_OUT ? join(root, process.env.PORTFOLIO_PUBLIC_OUT) : join(root, 'dist-public')
 const base = process.env.PORTFOLIO_PUBLIC_BASE || '/public-preview/'
 const publicScope = process.env.PORTFOLIO_PUBLIC_SCOPE || 'approved'
 const mediaLimitMiB = Number(process.env.PORTFOLIO_MEDIA_LIMIT_MB || 25)
@@ -62,7 +62,7 @@ for (const [path, source] of files) {
 }
 
 const vite = join(root, 'node_modules', 'vite', 'bin', 'vite.js')
-await run(process.execPath, [vite, 'build', '--mode', 'public'], { env: { ...process.env, PORTFOLIO_PUBLIC_BASE: base } })
+await run(process.execPath, [vite, 'build', '--mode', 'public', '--outDir', output], { env: { ...process.env, PORTFOLIO_PUBLIC_BASE: base } })
 for (const [path, source] of files) {
   const destination = join(output, path)
   await mkdir(dirname(destination), { recursive: true })
