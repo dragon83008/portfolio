@@ -77,5 +77,16 @@ for (const [path, source] of files) {
 }
 await writeFile(join(output, 'portfolio.json'), JSON.stringify(categories), 'utf8')
 await writeFile(join(output, '.portfolio-managed'), 'This directory contains only approved public portfolio output.\n', 'utf8')
+// 公开版 profileData 中的联系二维码不会被作品扫描覆盖，单独复制
+const qrRel = 'portfolio/contact/wechat-qr.png'
+const qrSource = join(root, 'public', qrRel)
+try {
+  await stat(qrSource)
+  await mkdir(join(output, 'portfolio', 'contact'), { recursive: true })
+  await copyFile(qrSource, join(output, qrRel))
+  console.log(`contact qr copied`)
+} catch {
+  console.log('contact qr not found, skipped')
+}
 const bytes = (await Promise.all([...files.values()].map(async (source) => (await stat(source)).size))).reduce((sum, value) => sum + value, 0)
 console.log(JSON.stringify({ categories: categories.length, projects: categories.reduce((sum, category) => sum + category.projects.length, 0), files: files.size, mediaMiB: Math.round(bytes / 1024 / 1024), base, scope: publicScope, mediaLimitMiB }))
