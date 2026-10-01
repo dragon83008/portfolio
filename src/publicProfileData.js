@@ -3,7 +3,7 @@ export const profile = {
   email: '3266830274@qq.com',
   wechat: 'Dragon-30-0',
   contactPublicApproved: true,
-  qr: '/portfolio/contact/wechat-qr.png',
+  qr: `${import.meta.env.BASE_URL}portfolio/contact/wechat-qr.png`,
   introduction: '我是段小龙，数字媒体艺术专业在读，关注视觉设计、AI 创作与影像表达。我的实践涵盖商业摄影、短视频创作与品牌视觉内容，习惯从策划、拍摄到后期制作，完整推进一个创意。',
   experiences: [
     { title: '文华学院 · 数字媒体艺术', text: '2023.09—2027.06（预计）\n本科在读。' },
