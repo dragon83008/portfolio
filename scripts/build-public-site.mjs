@@ -1,4 +1,5 @@
 import { spawn } from 'node:child_process'
+import { existsSync } from 'node:fs'
 import { copyFile, mkdir, readFile, stat, unlink, writeFile } from 'node:fs/promises'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -20,7 +21,9 @@ const files = new Map()
 const validPath = (path) => typeof path === 'string' && (/^\/portfolio\/[a-z0-9/_-]+\.(webp|jpe?g|png|mp4)$/i.test(path) || /^\/media\/[a-f0-9-]+(?:-poster)?\.(webp|mp4)$/i.test(path))
 function include(path) {
   if (!validPath(path)) throw new Error(`公开素材路径无效: ${path}`)
-  const source = path.startsWith('/media/') ? join(dataDir, path.slice(1)) : join(root, 'public', path.slice(1))
+  const primary = path.startsWith('/media/') ? join(dataDir, path.slice(1)) : join(root, 'public', path.slice(1))
+  const fallback = join(dataDir, 'deploy-cache', path.slice(1))
+  const source = existsSync(primary) ? primary : fallback
   files.set(path.slice(1), source)
   return `${base}${path.slice(1)}`
 }
@@ -63,6 +66,7 @@ for (const [path, source] of files) {
 
 const vite = join(root, 'node_modules', 'vite', 'bin', 'vite.js')
 await run(process.execPath, [vite, 'build', '--mode', 'public', '--outDir', output], { env: { ...process.env, PORTFOLIO_PUBLIC_BASE: base } })
+await copyFile(join(root, 'public', 'favicon.svg'), join(output, 'favicon.svg'))
 for (const [path, source] of files) {
   const destination = join(output, path)
   await mkdir(dirname(destination), { recursive: true })

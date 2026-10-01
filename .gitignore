@@ -11,6 +11,7 @@ node_modules
 dist
 dist-public
 dist-vercel*
+dist-gh-*
 sites-public/
 dist-ssr
 *.local
